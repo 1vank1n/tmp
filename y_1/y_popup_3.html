@@ -4,26 +4,26 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<style>
-        .m_wrap {
+		.m_wrap {
 			content: "";
 			position: fixed;
 			top: 0; right: 0; bottom: 0; left: 0;
 			background: rgba(0,0,0,0.5);
-            overflow: auto;
+			overflow: auto;
 		}
 		.m {
 			position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            max-width: 500px;
-            margin: auto;
-            padding: 25px;
+			top: 0; right: 0; bottom: 0; left: 0;
+			max-width: 500px;
+			margin: auto;
+			padding: 25px;
 			background: #fff;
-        }
-        .m img {
-            max-width: 100%;
-        }
+		}
+		.m img {
+			max-width: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -40,71 +40,71 @@
 	</div>
 
 	<div class="m_wrap">
-        <div class="m">
-        <blockquote>Универсальный способ. Преимущества – всё корректно и масштабируется под контент. Недостатки – добавил jQuery.</blockquote>
-            
-        <p>Porro a cupiditate voluptate iusto minus odio beatae quaerat facilis velit, aspernatur aut ex veniam omnis qui recusandae consectetur rerum unde sint sunt itaque praesentium, illum.</p>
-        <p>
-            <img height="200" src="http://lorempixel.com/450/200/" />
-        </p>
-        <button class="btn btn-primary" id="addContent">Добавить контент</button>
-        </div>
+		<div class="m">
+		<blockquote>Универсальный способ. Преимущества – всё корректно и масштабируется под контент. Недостатки – добавил jQuery.</blockquote>
+			
+		<p>Porro a cupiditate voluptate iusto minus odio beatae quaerat facilis velit, aspernatur aut ex veniam omnis qui recusandae consectetur rerum unde sint sunt itaque praesentium, illum.</p>
+		<p>
+			<img height="200" src="http://lorempixel.com/450/200/" />
+		</p>
+		<button class="btn btn-primary" id="addContent">Добавить контент</button>
+		</div>
 	</div>
-    
-    <script>
-        (function( $ ){
-            
-            // #######################################
-            // ### modal1 plugin by Ivan Lukyanets ###
-            // #######################################            
-            
-            $.fn.modal1 = function( options ) {
-                
-                var _this = this,
-                    settings = $.extend({
-                        margin: '5% auto',
-                    }, options );
-                
-                function getModalHeight( obj ) {
-                    var h = obj.innerHeight() - obj.height(); // add padding
-                    obj.find('> *').each(function(){
-                        h+= $(this).outerHeight(true); 
-                    });
-                    return h;
-                }
-                
-                function redraw() {
-                    if (getModalHeight( _this ) > $(window).height()) {
-                        _this.css({
-                            'margin': settings.margin
-                        });
-                    }
-                    
-                    _this.css('height', getModalHeight( _this ));
-                }
-                
-                $(window).bind('resize.modal1', function(){
-                    redraw();
-                });
-                
-                return this.each(function( ){
-                    redraw();
-                });
-            };
-            
-            // ####################### end plugin #######################
-            
-            $('.m').modal1({
-                'margin': '10% auto' // margin - задаёт отступ, если высота попапа больше чем у окна, дабы попап не прилепал
-            });
-            
-            // добавляем контент
-            $(document).on('click', '#addContent', function(){
-                $(this).before('<p>Porro a cupiditate voluptate iusto minus odio beatae quaerat facilis velit, aspernatur aut ex veniam omnis qui recusandae consectetur rerum unde sint sunt itaque praesentium, illum.</p>');
-                $('.m').modal1({'margin': '10% auto'});
-            });
-            
-        })( jQuery );
-    </script>
+	
+	<script>
+		(function( $ ){
+			
+			// #######################################
+			// ### modal1 plugin by Ivan Lukyanets ###
+			// #######################################            
+			
+			$.fn.modal1 = function( options ) {
+				
+				var _this = this,
+					settings = $.extend({
+						margin: '5% auto',
+					}, options );
+				
+				function getModalHeight( obj ) {
+					var h = obj.innerHeight() - obj.height(); // add padding
+					obj.find('> *').each(function(){
+						h+= $(this).outerHeight(true); 
+					});
+					return h;
+				}
+				
+				function redraw() {
+					if (getModalHeight( _this ) > $(window).height()) {
+						_this.css({
+							'margin': settings.margin
+						});
+					}
+					
+					_this.css('height', getModalHeight( _this ));
+				}
+				
+				$(window).bind('resize.modal1', function(){
+					redraw();
+				});
+				
+				return this.each(function( ){
+					redraw();
+				});
+			};
+			
+			// ####################### end plugin #######################
+			
+			$('.m').modal1({
+				'margin': '10% auto' // margin - задаёт отступ, если высота попапа больше чем у окна, дабы попап не прилепал
+			});
+			
+			// добавляем контент
+			$(document).on('click', '#addContent', function(){
+				$(this).before('<p>Porro a cupiditate voluptate iusto minus odio beatae quaerat facilis velit, aspernatur aut ex veniam omnis qui recusandae consectetur rerum unde sint sunt itaque praesentium, illum.</p>');
+				$('.m').modal1({'margin': '10% auto'});
+			});
+			
+		})( jQuery );
+	</script>
 </body>
 </html>
