@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<style>
+		html, body {
+			min-height: 100%;
+			min-width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<span id="cursor"></span>
+	<script>
+		var countOfCircles = 100,
+			radiusMouse = 50,
+			circleRadius = 10,
+
+			width = window.innerWidth,
+			height = window.innerHeight,
+			m = {x:0, y:0},
+			svg = d3.select('body')
+					.append('svg')
+					.attr('width', width)
+					.attr('height', height);
+
+		var i = 1,
+			dataset = [];
+		while (i < countOfCircles) {
+			dataset.push({
+				x: 0.5 * width,
+				y: 0.5 * height,
+				xv: (Math.random() - 0.5) * 8,
+				yv: (Math.random() - 0.5) * 8,
+				color: 0,
+				colorSpeed: Math.random() * 0.01
+			})
+			i++;
+		}
+
+		// motion
+		svg.append('g')
+			.selectAll("circle")
+			.data(dataset)
+			.enter()
+			.append('circle')
+			.attr('cx', function (d) { return d.x })
+			.attr('cy', function (d) { return d.y })
+			.attr('fill', 'red')
+			.attr('r', circleRadius);
+
+		function motion(d) {
+			sumX = d.x + d.xv - circleRadius;
+			sumY = d.y + d.yv - circleRadius;
+			if (sumX > width || sumX < 0) d.xv = -d.xv;
+			if (sumY > height || sumY < 0) d.yv = -d.yv;
+
+			razX = d.x - m.x - circleRadius;
+			razY = d.y - m.y - circleRadius;
+
+			if ( (Math.abs((d.x + d.xv) - m.x) < radiusMouse) && (Math.abs((d.y + d.yv) - m.y) < radiusMouse) ) {
+				d.xv = -d.xv;
+				d.yv = -d.yv;
+			}
+
+			if ( (d.color + d.colorSpeed > 1) || (d.color + d.colorSpeed < 0) ) {
+				d.colorSpeed = -d.colorSpeed;
+			}
+			
+			d.x = d.x + d.xv;
+			d.y = d.y + d.yv;
+			d.color = d.color + d.colorSpeed;
+		}
+
+		var colorScale = d3.scale.linear()
+							.domain([0, 1])
+							.range(['red', 'yellow']);
+
+		d3.timer(function() {
+
+			dataset.forEach(motion);
+
+			svg.select('g')
+				.selectAll("circle")
+				.attr("cx", function(d) { return d.x; })
+				.attr("cy", function(d) { return d.y; })
+				// .transition()
+				.attr('fill', function(d) { return colorScale(d.color) });
+
+		});
+
+		// cursor
+		svg.on('mousemove', function () {
+			m = {x: d3.mouse(this)[0], y: d3.mouse(this)[1]};
+		});
+
+		var cursor = svg.append('circle')
+			.attr('fill', 'transparent')
+			.attr('stroke', 'black')
+			.attr('stroke-width', 5)
+			.attr('r', radiusMouse-5);
+
+		function updatePosition() {
+
+			cursor
+				.attr('cx', m.x)
+				.attr('cy', m.y);
+		}
+
+		setInterval(updatePosition, 10);
+			
+	</script>
+</body>
+</html>
